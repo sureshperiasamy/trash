@@ -1,532 +1,172 @@
-# trash
+sqoop import --connect jdbc:mysql://localhost:3306/sqoop --username root -P --hive-import --table sqoop1 --create-hive-table --hive-table db.sqtest --m 1 --driver com.mysql.jdbc.Driver
 
-output1:
-ANANTAPUR
-KARIMNAGAR
-KHAMMAM
-NALGONDA
-NIZAMABAD
-WARANGAL
-DIBANG VALLEY
-TIRAP
-HAILAKANDI
-MADHUBANI
-VAISHALI
-KORBA
-NORTH GOA
-AHMEDABAD
-BHAVNAGAR
-DANGS
-JAMNAGAR
-MAHESANA
-NAVSARI
-PATAN
-PORBANDAR
-RAJKOT
-SURAT
-VALSAD
-BHIWANI
-FARIDABAD
-GURGAON
-HISAR
-JHAJJAR
-KARNAL
-KURUKSHETRA
-MAHENDRAGARH
-PANCHKULA
-PANIPAT
-ROHTAK
-SIRSA
-SONIPAT
-BILASPUR
-CHAMBA
-HAMIRPUR
-KANGRA
-KINNAUR
-KULLU
-LAHAUL &amp; SPITI
-MANDI
-SHIMLA
-SOLAN
-UNA
-DEOGHAR
-LOHARDAGA
-PURBI SINGHBHUM
-BANGALORE RURAL
-HASSAN
-KOLAR
-MANGALORE(DAKSHINA KANNADA)
-SHIMOGA
-UDUPI
-ALAPPUZHA
-ERNAKULAM
-IDUKKI
-KANNUR
-KASARGOD
-KOLLAM
-KOTTAYAM
-KOZHIKODE
-MALAPPURAM
-PALAKKAD
-PATHANAMTHITTA
-THIRUVANANTHAPURAM
-THRISSUR
-WAYANAD
-ALIRAJPUR
-ANUPPUR
-BARWANI
-BETUL
-BHOPAL
-BURHANPUR
-DATIA
-DEWAS
-DHAR
-GWALIOR
-HARDA
-HOSHANGABAD
-INDORE
-JABALPUR
-JHABUA
-KATNI
-KHANDWA(EAST NIMAR)
-KHARGONE
-MANDSAUR
-MORENA
-NEEMUCH
-RAISEN
-RAJGARH
-RATLAM
-REWA
-SEHORE
-SHAHDOL
-SHAJAPUR
-SHEOPUR
-UJJAIN
-UMARIA
-GADCHIROLI
-RATNAGIRI
-SINDHUDURG
-WEST GARO HILLS
-CHAMPHAI
-LAWNGTLAI
-BARNALA
-FATEHGARH SAHIB
-HOSHIARPUR
-LUDHIANA
-NAWANSHAHR
-S.A.S Nagar
-HANUMANGARH
-EAST SIKKIM
-NORTH SIKKIM
-SOUTH SIKKIM
-WEST SIKKIM
-DHARMAPURI
-ERODE
-KANCHIPURAM
-KANYAKUMARI(NAGERCOIL)
-KARUR
-NAMAKKAL
-PUDUKKOTTAI
-RAMANATHAPURAM
-TIRUCHIRAPPALLI
-TIRUNELVELI
-TIRUVANNAMALAI
-TIRUVARUR
-DHALAI
-SOUTH TRIPURA
-WEST TRIPURA
-AGRA
-ALLAHABAD
-AMBEDKAR NAGAR
-BALRAMPUR
-BARABANKI
-BAREILLY
-BIJNOR
-BUDAUN
-BULANDSHAHR
-CHANDAULI
-CHITRAKOOT
-ETAH
-ETAWAH
-FARRUKHABAD
-FIROZABAD
-GHAZIABAD
-HARDOI
-JAUNPUR
-JHANSI
-JYOTIBA PHULE NAGAR
-KANNAUJ
-LAKHIMPUR KHERI
-LUCKNOW
-MAHAMAYA NAGAR(HATHRAS)
-MAHARAJGANJ
-MAHOBA
-MATHURA
-MIRZAPUR
-MORADABAD
-MUZAFFARNAGAR
-PILIBHIT
-PRATAPGARH
-RAE BARELI
-SAHARANPUR
-SHAHJAHANPUR
-SONBHADRA
-SULTANPUR
-NAINITAL
-RUDRAPRAYAG
-DAKSHIN DINAJPUR
-MIDNAPUR EAST
-MIDNAPUR WEST
+-
+
+a = load 'hdfs://localhost:9000/project/flume_data/StatewiseDistrictwisePhysicalProgress.xml' using org.apache.pig.piggybank.storage.XMLLoader('row') as (x:chararray);
+
+
+B = foreach a generate REPLACE(x,'[\\n]','') as x;
+
+C = foreach B generate REGEX_EXTRACT_ALL(x,'.*(?:<State_Name>)([^<]*).*(?:<District_Name>)([^<]*).*(?:<Project_Objectives_IHHL_BPL>)([^<]*).*(?:<Project_Objectives_IHHL_APL>)([^<]*).*(?:<Project_Objectives_IHHL_TOTAL>)([^<]*).*(?:<Project_Objectives_SCW>)([^<]*).*(?:<Project_Objectives_School_Toilets>)([^<]*).*(?:<Project_Objectives_Anganwadi_Toilets>)([^<]*).*(?:<Project_Objectives_RSM>)([^<]*).*(?:<Project_Objectives_PC>)([^<]*).*(?:<Project_Performance-IHHL_BPL>)([^<]*).*(?:<Project_Performance-IHHL_APL>)([^<]*).*(?:<Project_Performance-IHHL_TOTAL>)([^<]*).*(?:<Project_Performance-SCW>)([^<]*).*(?:<Project_Performance-School_Toilets>)([^<]*).*(?:<Project_Performance-Anganwadi_Toilets>)([^<]*).*(?:<Project_Performance-RSM>)([^<]*).*(?:<Project_Performance-PC>)([^<]*).*');
+
+
+D = FOREACH C GENERATE FLATTEN ($0);
+
+STORE D INTO ' hdfs://localhost:9000/xmlfile/' USING PigStorage (',');
+
+
+-
 
 
 
-output2:
-ANANTAPUR
-CHITTOOR
-CUDDAPAH
-EAST GODAVARI
-KARIMNAGAR
-KHAMMAM
-KRISHNA
-KURNOOL
-MEDAK
-NALGONDA
-NIZAMABAD
-RANGAREDDI
-WARANGAL
-WEST GODAVARI
-DIBANG VALLEY
-LOHIT
-TIRAP
-BAGSHA
-CACHAR
-DIBRUGARH
-GOALPARA
-GOLAGHAT
-HAILAKANDI
-JORHAT
-KAMRUP
-KARIMGANJ
-KOKRAJHAR
-LAKHIMPUR
-MARIGAON
-NAGAON
-SIBSAGAR
-SONITPUR
-TINSUKIA
-BEGUSARAI
-MADHUBANI
-MUZAFFARPUR
-SAHARSA
-VAISHALI
-DHAMTARI
-JASHPUR
-KANKER
-KORBA
-KORIYA
-SURGUJA
-NORTH GOA
-AHMEDABAD
-AMRELI
-ANAND
-BANAS KANTHA
-BHARUCH
-BHAVNAGAR
-DAHOD
-DANGS
-GANDHINAGAR
-JAMNAGAR
-JUNAGADH
-KACHCHH
-KHEDA
-MAHESANA
-NARMADA
-NAVSARI
-PANCH MAHALS
-PATAN
-PORBANDAR
-RAJKOT
-SABAR KANTHA
-SURAT
-SURENDRANAGAR
-VADODARA
-VALSAD
-AMBALA
-BHIWANI
-FARIDABAD
-FATEHABAD
-GURGAON
-HISAR
-JHAJJAR
-JIND
-KAITHAL
-KARNAL
-KURUKSHETRA
-MAHENDRAGARH
-MEWAT
-PANCHKULA
-PANIPAT
-REWARI
-ROHTAK
-SIRSA
-SONIPAT
-YAMUNANAGAR
-BILASPUR
-CHAMBA
-HAMIRPUR
-KANGRA
-KINNAUR
-KULLU
-LAHAUL &amp; SPITI
-MANDI
-SHIMLA
-SIRMAUR
-SOLAN
-UNA
-ANANTNAG
-LEH (LADAKH)
-DEOGHAR
-DUMKA
-LATEHAR
-LOHARDAGA
-PAKUR
-PURBI SINGHBHUM
-BAGALKOT
-BANGALORE RURAL
-CHICKMAGALUR
-CHITRADURGA
-DHARWAD
-GADAG
-HASSAN
-KODAGU
-KOLAR
-KOPPAL
-MANDYA
-MANGALORE(DAKSHINA KANNADA)
-RAMANAGARA                              
-SHIMOGA
-UDUPI
-ALAPPUZHA
-ERNAKULAM
-IDUKKI
-KANNUR
-KASARGOD
-KOLLAM
-KOTTAYAM
-KOZHIKODE
-MALAPPURAM
-PALAKKAD
-PATHANAMTHITTA
-THIRUVANANTHAPURAM
-THRISSUR
-WAYANAD
-ALIRAJPUR
-ANUPPUR
-BARWANI
-BETUL
-BHOPAL
-BURHANPUR
-DATIA
-DEWAS
-DHAR
-DINDORI
-GUNA
-GWALIOR
-HARDA
-HOSHANGABAD
-INDORE
-JABALPUR
-JHABUA
-KATNI
-KHANDWA(EAST NIMAR)
-KHARGONE
-MANDLA
-MANDSAUR
-MORENA
-NARSINGHPUR
-NEEMUCH
-RAISEN
-RAJGARH
-RATLAM
-REWA
-SEHORE
-SEONI
-SHAHDOL
-SHAJAPUR
-SHEOPUR
-SINGRAULI
-UJJAIN
-UMARIA
-VIDISHA
-AHMEDNAGAR
-BHANDARA
-DHULE
-GADCHIROLI
-GONDIA
-HINGOLI
-JALNA
-KOLHAPUR
-NAGPUR
-OSMANABAD
-PARBHANI
-PUNE
-RATNAGIRI
-SANGLI
-SATARA
-SINDHUDURG
-THANE
-WARDHA
-BISHNUPUR
-IMPHAL EAST
-TAMENGLONG
-RI BHOI
-SOUTH GARO HILLS
-WEST GARO HILLS
-CHAMPHAI
-KOLASIB
-LAWNGTLAI
-LUNGLEI
-MAMIT
-SAIHA
-SERCHHIP
-KOHIMA
-MOKOKCHUNG
-PHEK
-BALESWAR
-JAGATSINGHAPUR
-BARNALA
-FATEHGARH SAHIB
-HOSHIARPUR
-JALANDHAR
-KAPURTHALA
-LUDHIANA
-MANSA
-NAWANSHAHR
-S.A.S Nagar
-AJMER
-CHURU
-DUNGARPUR
-GANGANAGAR
-HANUMANGARH
-JAISALMER
-NAGAUR
-SIKAR
-EAST SIKKIM
-NORTH SIKKIM
-SOUTH SIKKIM
-WEST SIKKIM
-COIMBATORE
-CUDDALORE
-DHARMAPURI
-DINDIGUL
-ERODE
-KANCHIPURAM
-KANYAKUMARI(NAGERCOIL)
-KARUR
-MADURAI
-NAMAKKAL
-NILGIRIS(UDHAGAMANDALAM)
-PERAMBALUR
-PUDUKKOTTAI
-RAMANATHAPURAM
-SALEM
-SIVAGANGA
-THENI
-THOOTHUKUDI
-TIRUCHIRAPPALLI
-TIRUNELVELI
-TIRUVANNAMALAI
-TIRUVARUR
-VELLORE
-VIRUDHUNAGAR
-DHALAI
-NORTH TRIPURA
-SOUTH TRIPURA
-WEST TRIPURA
-AGRA
-ALIGARH
-ALLAHABAD
-AMBEDKAR NAGAR
-AZAMGARH
-BAGPAT
-BALLIA
-BALRAMPUR
-BANDA
-BARABANKI
-BAREILLY
-BASTI
-BIJNOR
-BUDAUN
-BULANDSHAHR
-CHANDAULI
-CHITRAKOOT
-DEORIA
-ETAH
-ETAWAH
-FAIZABAD
-FARRUKHABAD
-FATEHPUR
-FIROZABAD
-GAUTAM BUDDHA NAGAR
-GHAZIABAD
-GHAZIPUR
-GONDA
-GORAKHPUR
-HAMIRPUR
-HARDOI
-JALAUN
-JAUNPUR
-JHANSI
-JYOTIBA PHULE NAGAR
-KANNAUJ
-KANPUR DEHAT
-KANPUR NAGAR
-KAUSHAMBI
-KUSHINAGAR
-LAKHIMPUR KHERI
-LALITPUR
-LUCKNOW
-MAHAMAYA NAGAR(HATHRAS)
-MAHARAJGANJ
-MAHOBA
-MAINPURI
-MATHURA
-MAU
-MEERUT
-MIRZAPUR
-MORADABAD
-MUZAFFARNAGAR
-PILIBHIT
-PRATAPGARH
-RAE BARELI
-RAMPUR
-SAHARANPUR
-SANT RAVIDAS NAGAR( BHADOHI)
-SHAHJAHANPUR
-SHRAVASTI
-SIDDHARTHNAGAR
-SITAPUR
-SONBHADRA
-SULTANPUR
-UNNAO
-VARANASI
-BAGESHWAR
-CHAMOLI
-DEHRADUN
-HARIDWAR
-NAINITAL
-PITHORAGARH
-RUDRAPRAYAG
-TEHRI GARHWAL
-UDHAM SINGH NAGAR
-UTTARKASHI
-BARDHAMAN
-DAKSHIN DINAJPUR
-HOOGHLY
-HOWRAH
-JALPAIGURI
-MIDNAPUR EAST
-MIDNAPUR WEST
-NADIA
-NORTH 24 PARAGANAS
-SOUTH 24 PARAGANAS
+loadJson = LOAD '/olympic.json' USING JsonLoader('athelete:chararray,age:INT,country:chararray,year:chararray,closing:chararray,sport:chararray,gold:INT,silver:INT,bronze:INT,total:INT');
+
+-
+
+hive> set hive.auto.convert.join=true;
+set hive.auto.convert.join.noconditionaltask=true;
+
+
+
+-
+
+import org.apache.hadoop.hive.ql.exec.UDAF;
+import org.apache.hadoop.hive.ql.exec.UDAFEvaluator;
+
+public class hiveudf extends UDAF {
+  public static class udfeval implements UDAFEvaluator
+  {
+	  
+  public static class column
+  {
+	  int sum = 0;
+  }
+private column col = null;
+
+public udfeval()
+{
+	super();
+	init();
+}
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		col = new column(); 
+	}
+
+	
+public boolean iterate(int value)
+{
+	if(col==null)
+	{
+		return true;
+		
+	}
+	else
+	{
+		col.sum = col.sum+value;
+		return true;
+	}
+}
+public boolean merge(column other)
+{
+	if (other == null)
+	{
+		return true;
+		
+	}
+	else
+	{
+		col.sum = col.sum + other.sum;
+		return true;
+	}
+	
+
+  }
+
+public column terminatePartial()
+{
+	return col;
+}
+public  int terminate()
+{
+	return col.sum;
+	
+}
+
+  
+  } 
+}
+	  
+  	
+---
+
+
+
+
+import java.util.ArrayList;
+
+import org.apache.hadoop.hive.ql.exec.UDF;
+import org.apache.hadoop.io.Text;
+
+public class hiveudf2 extends UDF{
+	public Text evaluate(String str ,ArrayList<String> str1)
+	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < str1.size(); i++) {
+			sb.append(str1.get(i));
+			sb.append(str);
+			
+		}
+		return new Text(sb.toString());
+		
+	}
+	
+
+}
+
+
+--
+
+hive> set hive.auto.convert.join=true;
+
+hive> set hive.auto.convert.join.noconditionaltask=true;
+
+--
+public class ToolMapReduce extends Configured implements Tool {
+ 
+    public static void main(String[] args) throws Exception {
+        int res = ToolRunner.run(new Configuration(), new ToolMapReduce(), args);
+        System.exit(res);
+    }
+
+ public int run(String[] args) throws Exception {
+ 
+        // When implementing tool
+        Configuration conf = this.getConf();
+ 
+        // Create job
+        Job job = new Job(conf, "Tool Job");
+        job.setJarByClass(ToolMapReduce.class);
+ 
+        // Setup MapReduce job
+        // Do not specify the number of Reducer
+        job.setMapperClass(Mapper.class);
+        job.setReducerClass(Reducer.class);
+ 
+        // Specify key / value
+        job.setOutputKeyClass(LongWritable.class);
+        job.setOutputValueClass(Text.class);
+ 
+        // Input
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+        job.setInputFormatClass(TextInputFormat.class);
+ 
+        // Output
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        job.setOutputFormatClass(TextOutputFormat.class);
+ 
+        // Execute job and return status
+        return job.waitForCompletion(true) ? 0 : 1;
+    }
+}
